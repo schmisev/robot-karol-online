@@ -554,7 +554,7 @@ export function AppearanceModal() {
           </button>
         </div>
         <div className="flex w-full h-full">
-          <div className="flex-grow-0 flex-shrink-0 w-[120px] bg-white overflow-y-auto pb-3">
+          <div className="flex-grow-0 flex-shrink-0 w-[120px] bg-white overflow-auto pb-3">
             <div className="text-center mt-4">
               <button
                 className="mr-4 text-gray-400 hover:text-gray-500"
@@ -595,10 +595,10 @@ export function AppearanceModal() {
                 }}
               />
             </div>
-            <div className="flex flex-wrap justify-center gap-3 mt-3">
+            <div className="flex flex-wrap justify-center gap-1 mt-3 p-1">
               <button
                 title="Pinsel"
-                className={`px-3 py-1 border rounded ${tool === 'brush' ? 'bg-gray-300' : 'bg-white'
+                className={`h-8 px-3 py-1 border rounded ${tool === 'brush' ? 'bg-gray-300' : 'bg-white'
                   }`}
                 onClick={() => {
                   // submitAnalyzeEvent(core, 'ev_click_appearance_brush')
@@ -609,7 +609,7 @@ export function AppearanceModal() {
               </button>
               <button
                 title="Füllen"
-                className={`px-3 py-1 border rounded ${tool === 'paintBucket' ? 'bg-gray-300' : 'bg-white'
+                className={`h-8 px-3 py-1 border rounded ${tool === 'paintBucket' ? 'bg-gray-300' : 'bg-white'
                   }`}
                 onClick={() => {
                   // submitAnalyzeEvent(core, 'ev_click_appearance_fill')
@@ -620,7 +620,7 @@ export function AppearanceModal() {
               </button>
               <button
                 title="Linie"
-                className={`px-3 py-1 border rounded ${tool === 'line' ? 'bg-gray-300' : 'bg-white'
+                className={`h-8 px-3 py-1 border rounded ${tool === 'line' ? 'bg-gray-300' : 'bg-white'
                   }`}
                 onClick={() => {
                   // submitAnalyzeEvent(core, 'ev_click_appearance_eraser')
@@ -641,7 +641,7 @@ export function AppearanceModal() {
               </button>
               <button
                 title="Rechteck"
-                className={`px-3 py-1 border rounded ${tool === 'rectangle' ? 'bg-gray-300' : 'bg-white'
+                className={`h-8 px-3 py-1 border rounded ${tool === 'rectangle' ? 'bg-gray-300' : 'bg-white'
                   }`}
                 onClick={() => {
                   // submitAnalyzeEvent(core, 'ev_click_appearance_fill')
@@ -654,7 +654,7 @@ export function AppearanceModal() {
               </button>
               <button
                 title="Ellipse"
-                className={`px-3 py-1 border rounded ${tool === 'ellipse' ? 'bg-gray-300' : 'bg-white'
+                className={`h-8 px-3 py-1 border rounded ${tool === 'ellipse' ? 'bg-gray-300' : 'bg-white'
                   }`}
                 onClick={() => {
                   // submitAnalyzeEvent(core, 'ev_click_appearance_fill')
@@ -667,7 +667,7 @@ export function AppearanceModal() {
               </button>
               <button
                 title="Radierer"
-                className={`px-3 py-1 border rounded ${tool === 'eraser' ? 'bg-gray-300' : 'bg-white'
+                className={`h-8 px-3 py-1 border rounded ${tool === 'eraser' ? 'bg-gray-300' : 'bg-white'
                   }`}
                 onClick={() => {
                   // submitAnalyzeEvent(core, 'ev_click_appearance_eraser')
@@ -685,11 +685,11 @@ export function AppearanceModal() {
               </button>
             </div>
             {/* Farbpalette */}
-            <div className="flex gap-1 mt-4 flex-wrap justify-center">
+            <div className="grid grid-cols-4 p-2 gap-1 mt-1 justify-center justify-items-center">
               {colors.map((color) => (
                 <button
                   key={color}
-                  className={`w-6 h-6 rounded border out ${selectedColor === color ? 'border-2 border-black' : 'gray-300'
+                  className={`w-6 h-4 rounded out ${selectedColor === color ? 'border-2 border-black' : 'border gray-300'
                     }`}
                   style={{ backgroundColor: color }}
                   onClick={() => {
@@ -704,7 +704,9 @@ export function AppearanceModal() {
                   }}
                 />
               ))}
-              <div className="flex items-center gap-2 flex-wrap justify-center mt-3">
+            </div>
+            {/* Size picker */}
+            <div className="flex items-center gap-2 flex-wrap justify-center mt-3">
                 {[1, 2, 3, 10].map((size) => (
                   <button
                     key={size}
@@ -730,7 +732,6 @@ export function AppearanceModal() {
                   </button>
                 ))}
               </div>
-            </div>
           </div>
           <div className="flex-grow flex-shrink flex flex-col">
             <div className="flex-grow-0 flex-shrink-0 h-[52px] bg-gray-100 flex gap-4 rounded-tr-xl items-center">
