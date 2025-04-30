@@ -104,6 +104,9 @@ export function AppearanceModal() {
     return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255]
   }
 
+  const RGBToHex = (r: number, g: number, b: number) => '#' + [r, g, b]
+  .map(x => x.toString(16).padStart(2, '0')).join('')
+
   // Hilfsfunktion: Vergleicht zwei RGBA-Arrays.
   const colorsEqual = (a: number[], b: number[]) => {
     const tolerance = 20 // ungefähr 5% von 255
@@ -505,36 +508,45 @@ export function AppearanceModal() {
     }
   }
 
-  const colors = [
-    '#000000',
-    '#ffffff',
-    '#464646',
-    '#b4b4b4',
-    '#e96b6d',
-    '#2e5691',
-    '#ffd266',
-    '#990030',
-    '#9c5a3c',
-    '#ed1c24',
-    '#ffa3b1',
-    '#ff7e00',
-    '#e5aa7a',
-    '#ffc20e',
-    '#f5e49c',
-    '#fff200',
-    '#fff9bd',
-    '#a8e61d',
-    '#d3f9bc',
-    '#22b14c',
-    '#00b7ef',
-    '#99d9ea',
-    '#4d6df3',
-    '#709ad1',
-    '#2f3699',
-    '#546d8e',
-    '#6f3198',
-    '#b5a5d5',
+  const baseColors = [
+    '#9E9F9E',
+    '#71E500',
+    '#E6C401',
+    '#E66700',
+    '#E61B00',
+    '#E5005F',
+    '#5B00E5',
+    '#0023E5',
+    '#008AE6',
+    '#00E6C7',
+    '#00E65B'
   ]
+
+  const lightnesses = [0.3, 0.7, 1.0, 1.3];
+
+  const buildColors = (colors: string[], lightnesses: number[], beautify: boolean) => {
+    let finalColors: string[] = [];
+    let [r, g, b, a] = [0, 0, 0, 0];
+    let [multL, addL] = [0, 0];
+    // this is an old pixel-art trick: make your shadows blue and your lights yellow
+    let tintBias = beautify ? 50 : 0;
+    let lightBias = 255 - tintBias;
+    for (let c of colors) {
+      [r, g, b, a] = hexToRGBA(c);
+      for (let l of lightnesses) {
+        [multL, addL] = l > 1 ? [1, l-1] : [l, 0];
+        finalColors.push(RGBToHex(
+          Math.min(255, Math.round(r * multL + 255 * addL)),
+          Math.min(255, Math.round(g * multL + 255 * addL)),
+          Math.min(255, Math.round(b * multL + tintBias * (1 - multL) + lightBias * addL))
+        ));
+      }
+    }
+    return finalColors;
+  }
+
+  const colors = buildColors(["#FFFFFF"], [0.0, 0.3, 0.7, 1.0], false) // B & W
+    .concat(buildColors(baseColors, lightnesses, true));
 
   return (
     <div className="bg-black/50 fixed inset-0 z-[1150]" onClick={() => { }}>
@@ -703,7 +715,7 @@ export function AppearanceModal() {
               {colors.map((color) => (
                 <button
                   key={color}
-                  className={`w-6 h-6 border-2 ${selectedColor === color ? 'border-black' : 'border-gray-300'
+                  className={`w-6 h-6 rounded border out ${selectedColor === color ? 'border-2 border-black' : 'gray-300'
                     }`}
                   style={{ backgroundColor: color }}
                   onClick={() => {
@@ -729,7 +741,7 @@ export function AppearanceModal() {
                       )*/
                       setBrushSize(size)
                     }}
-                    className={`flex items-center justify-center w-10 h-10 border rounded-full ${brushSize === size ? 'bg-gray-300' : 'bg-white'
+                    className={`flex items-center justify-center w-10 h-10 border rounded ${brushSize === size ? 'bg-gray-300' : 'bg-white'
                       }`}
                   >
                     <div
@@ -737,7 +749,8 @@ export function AppearanceModal() {
                         width: `${size * 3}px`,
                         height: `${size * 3}px`,
                         backgroundColor: `${selectedColor}`,
-                        borderRadius: '50%',
+                        borderRadius: '0%',
+                        border: 'rgba(0, 0, 0, 0.4) solid 1px'
                       }}
                     />
                   </button>
